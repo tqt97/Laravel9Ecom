@@ -1,6 +1,6 @@
 <script setup>
-import { Head } from "@inertiajs/inertia-vue3";
-import { ref } from "vue";
+import {Head} from "@inertiajs/inertia-vue3";
+import {ref, watch, onMounted} from "vue";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
@@ -9,6 +9,9 @@ import Td from "@/admin/Components/Table/Td.vue";
 import Actions from "@/admin/Components/Table/Actions.vue";
 import Button from "@/admin/Components/Button.vue";
 import Modal from "@/admin/Components/Modal.vue";
+import Input from "@/admin/Components/Input.vue";
+import {Inertia} from "@inertiajs/inertia";
+
 
 const props = defineProps({
     roles: {
@@ -19,7 +22,7 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    items: {
+    filters: {
         type: Object,
         default: () => ({}),
     },
@@ -27,14 +30,55 @@ const props = defineProps({
 
 const deleteModal = ref(false);
 const itemToDelete = ref({});
+const isDeleting = ref(false);
 
-function showDeleteModal() {
+function showDeleteModal (item) {
     deleteModal.value = true;
     itemToDelete.value = item;
 }
+function handleDeleteItem () {
+    Inertia.delete(route("admin.roles.destroy", {id: itemToDelete.value.id}), {
+        onBefore: () => {
+            isDeleting.value = true;
+        },
+        onSuccess: () => {
+            deleteModal.value = false;
+            itemToDelete.value = {};
+        },
+        onFinish: () => {
+            isDeleting.value = false;
+        }
+
+    });
+}
+
+const filters = ref({
+    name: "",
+});
+const fetchItemsHandler = ref(null);
+function fetchItems () {
+    Inertia.get(route("admin.roles.index"), filters.value, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: true,
+    },);
+}
+onMounted(() => {
+    filters.value = props.filters;
+});
+watch(filters, () => {
+    clearTimeout(fetchItemsHandler.value);
+
+    fetchItemsHandler.value = setTimeout(() => {
+        fetchItems();
+    }, 300);
+}, {
+    deep: true,
+});
 </script>
 
 <template>
+
     <Head title="Roles" />
 
     <BreezeAuthenticatedLayout>
@@ -45,12 +89,25 @@ function showDeleteModal() {
         </template>
 
         <Container>
-            <Button :href="route('admin.roles.create')" class="mb-5">
+            <Card class="mb-4">
+                <template #header>
+                    Filter
+                </template>
+                <form class="grid grid-cols-4 gap-8">
+                    <div>
+                        <Label value="Name" />
+
+                        <Input type="text" class="mt-1 block w-full"
+                            v-model=" filters.name " />
+                    </div>
+                </form>
+            </Card>
+            <Button :href=" route( 'admin.roles.create' ) " class="mb-5">
                 Add new role
             </Button>
             <Card>
-                <Table :headers="headers" :items="roles">
-                    <template v-slot="{ item }">
+                <Table :headers=" headers " :items=" roles ">
+                    <template v-slot=" { item } ">
                         <Td>
                             {{ item.name }}
                         </Td>
@@ -58,24 +115,21 @@ function showDeleteModal() {
                             {{ item.created_at_formatted }}
                         </Td>
                         <Td>
-                            <Actions
-                                :edit-link="
-                                    route('admin.roles.edit', { id: item.id })
-                                "
-                                @deleteClicked="showDeleteModal(item)"
-                            />
+                            <Actions :edit-link="
+                                route( 'admin.roles.edit', { id: item.id } )
+                            " @deleteClicked=" showDeleteModal( item ) " />
                         </Td>
                     </template>
                 </Table>
             </Card>
         </Container>
     </BreezeAuthenticatedLayout>
-    <Modal v-model="deleteModal" :title="`Delete ${itemToDelete.name}`">
+    <Modal v-model=" deleteModal " :title=" `Delete ${ itemToDelete.name }` ">
         Are you sure you want to delete this item?
 
         <template #footer>
-            <Button @click="handleDeleteItem" :disabled="isDeleting">
-                <span v-if="isDeleting">Deleting</span>
+            <Button @click=" handleDeleteItem " :disabled=" isDeleting ">
+                <span v-if=" isDeleting ">Deleting</span>
                 <span v-else>Delete</span>
             </Button>
         </template>

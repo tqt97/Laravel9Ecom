@@ -8,6 +8,7 @@ use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
+use Illuminate\Database\Eloquent\Builder;
 
 class RoleController extends Controller
 {
@@ -28,10 +29,11 @@ class RoleController extends Controller
         //     ->latest('id')
         //     ->paginate(10);
         $roles = Role::select(['id', 'name', 'created_at'])
+            ->when($request->name, fn (Builder $builder, $name) => $builder->where('name', 'like', "%{$name}%"))
             ->latest('id')->paginate(10);
 
         return Inertia::render('Role/Index', [
-            // 'title' => 'Roles',
+            'title' => 'List Roles',
             'roles' => RoleResource::collection($roles),
             'headers' => [
                 [
@@ -47,7 +49,7 @@ class RoleController extends Controller
                     'name' => 'actions',
                 ],
             ],
-            // 'filters' => (object) $request->all(),
+            'filters' => (object) $request->all(),
             // 'routeResourceName' => $this->routeResourceName,
             // 'can' => [
             //     'create' => $request->user()->can('create role'),
@@ -62,7 +64,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Role/Create',[
+        return Inertia::render('Role/Create', [
             'edit' => false,
             'title' => 'Create a new role',
         ]);
@@ -101,7 +103,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Role/Create', [
             'role' => new RoleResource($role),
-            'title' =>'Edit Role',
+            'title' => 'Edit Role',
             'edit' => true,
         ]);
     }
