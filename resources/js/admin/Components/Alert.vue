@@ -16,7 +16,7 @@ watch(
             timeoutHandler.value = setTimeout(() => {
                 message.value = "";
                 usePage().props.value.flash.success = "";
-            }, 5000);
+            }, 3000);
         }
     },
     {

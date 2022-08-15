@@ -5,7 +5,7 @@ import BreezeDropdown from '@/admin/Components/Dropdown.vue';
 import BreezeDropdownLink from '@/admin/Components/DropdownLink.vue';
 import BreezeNavLink from '@/admin/Components/NavLink.vue';
 import BreezeResponsiveNavLink from '@/admin/Components/ResponsiveNavLink.vue';
-// import Alert from "@/admin/Components/Alert.vue";
+import Alert from "@/admin/Components/Alert.vue";
 import {Link} from '@inertiajs/inertia-vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <!-- <Alert /> -->
+        <Alert />
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->

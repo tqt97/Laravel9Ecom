@@ -22,33 +22,35 @@ defineProps({
                 <table class="min-w-full">
                     <thead class="border-b">
                         <tr>
-                            <Th v-for="header in headers" :key=" header.label "
-                                :class=" `${ header.classes } font-bold` ">
+                            <Th
+                                v-for="header in headers"
+                                :key="header.label"
+                                :class="`${header.classes} font-bold`"
+                            >
                                 {{ header.label }}
                             </Th>
                         </tr>
                     </thead>
                     <tbody>
-                        <slot/>
-                        <!-- <tr>
-                            <td>adasf</td>
+                        <tr
+                            class="border-b"
+                            v-for="item in items.data"
+                            :key="item.id"
+                        >
+                            <slot :item="item"></slot>
                         </tr>
-                        <tr class="border-b" v-for="item in items.data"
-                            :key=" item.id ">
-                            <slot :item=" item "></slot>
-                        </tr>
-                        <tr v-if=" items.data.length === 0 ">
-                            <Td :colspan=" headers.length ">
+                        <tr v-if="items.data.length === 0">
+                            <Td :colspan="headers.length">
                                 No data available.
                             </Td>
-                        </tr> -->
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- <div v-if=" items.meta.links.length > 3 " class="py-4">
+    <div v-if=" items.meta.links.length > 3 " class="py-4">
         <Pagination :links=" items.meta.links " />
-    </div> -->
+    </div>
 </template>

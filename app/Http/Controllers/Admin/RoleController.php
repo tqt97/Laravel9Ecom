@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Spatie\Permission\Models\Role;
+use App\Http\Requests\Admin\Role\StoreRequest;
 
 class RoleController extends Controller
 {
@@ -29,9 +30,9 @@ class RoleController extends Controller
         $roles = Role::select(['id', 'name', 'created_at'])
             ->latest('id')->paginate(10);
 
-        return Inertia::render('Roles/Index', [
+        return Inertia::render('Role/Index', [
             // 'title' => 'Roles',
-            'items' => RoleResource::collection($roles),
+            'roles' => RoleResource::collection($roles),
             'headers' => [
                 [
                     'label' => 'Name',
@@ -61,7 +62,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Role/Create',[
+            'edit' => false,
+        ]);
     }
 
     /**
@@ -70,9 +73,10 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        Role::create($request->validated());
+        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully ! ');
     }
 
     /**
@@ -92,9 +96,12 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return Inertia::render('Role/Edit', [
+            'role' => new RoleResource($role),
+            'edit' => true,
+        ]);
     }
 
     /**
