@@ -1,4 +1,6 @@
 <script setup>
+import { Head } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
@@ -6,7 +8,7 @@ import Table from "@/admin/Components/Table/Table.vue";
 import Td from "@/admin/Components/Table/Td.vue";
 import Actions from "@/admin/Components/Table/Actions.vue";
 import Button from "@/admin/Components/Button.vue";
-import { Head } from "@inertiajs/inertia-vue3";
+import Modal from "@/admin/Components/Modal.vue";
 
 const props = defineProps({
     roles: {
@@ -22,6 +24,14 @@ const props = defineProps({
         default: () => ({}),
     },
 });
+
+const deleteModal = ref(false);
+const itemToDelete = ref({});
+
+function showDeleteModal() {
+    deleteModal.value = true;
+    itemToDelete.value = item;
+}
 </script>
 
 <template>
@@ -35,7 +45,9 @@ const props = defineProps({
         </template>
 
         <Container>
-            <Button :href="route('admin.roles.create')" class="mb-5"> Add new role </Button>
+            <Button :href="route('admin.roles.create')" class="mb-5">
+                Add new role
+            </Button>
             <Card>
                 <Table :headers="headers" :items="roles">
                     <template v-slot="{ item }">
@@ -46,11 +58,26 @@ const props = defineProps({
                             {{ item.created_at_formatted }}
                         </Td>
                         <Td>
-                            <Actions :edit-link="route('admin.roles.edit',{id:item.id})"/>
+                            <Actions
+                                :edit-link="
+                                    route('admin.roles.edit', { id: item.id })
+                                "
+                                @deleteClicked="showDeleteModal(item)"
+                            />
                         </Td>
                     </template>
                 </Table>
             </Card>
         </Container>
     </BreezeAuthenticatedLayout>
+    <Modal v-model="deleteModal" :title="`Delete ${itemToDelete.name}`">
+        Are you sure you want to delete this item?
+
+        <template #footer>
+            <Button @click="handleDeleteItem" :disabled="isDeleting">
+                <span v-if="isDeleting">Deleting</span>
+                <span v-else>Delete</span>
+            </Button>
+        </template>
+    </Modal>
 </template>

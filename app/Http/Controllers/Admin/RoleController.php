@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
-use App\Http\Requests\Admin\Role\StoreRequest;
 
 class RoleController extends Controller
 {
@@ -64,6 +64,7 @@ class RoleController extends Controller
     {
         return Inertia::render('Role/Create',[
             'edit' => false,
+            'title' => 'Create a new role',
         ]);
     }
 
@@ -73,7 +74,7 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(RoleRequest $request)
     {
         Role::create($request->validated());
         return redirect()->route('admin.roles.index')->with('success', 'Role created successfully ! ');
@@ -98,8 +99,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return Inertia::render('Role/Edit', [
+        return Inertia::render('Role/Create', [
             'role' => new RoleResource($role),
+            'title' =>'Edit Role',
             'edit' => true,
         ]);
     }
@@ -111,9 +113,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, Role $role)
     {
-        //
+        $role->update($request->validated());
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully!');
     }
 
     /**
@@ -122,8 +125,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return back()->with('success', 'Role deleted successfully!');
     }
 }

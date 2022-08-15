@@ -1,4 +1,6 @@
 <script setup>
+import { onMounted } from "vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
@@ -8,24 +10,45 @@ import BreezeCheckbox from "@/admin/Components/Checkbox.vue";
 import BreezeInput from "@/admin/Components/Input.vue";
 import BreezeInputError from "@/admin/Components/InputError.vue";
 import BreezeLabel from "@/admin/Components/Label.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+
+const props = defineProps({
+    edit: {
+        type: Boolean,
+        default: false,
+    },
+    role: {
+        type: Object,
+        default: () => ({}),
+    },
+    title: {
+        type: String,
+    },
+});
 
 const form = useForm({
     name: "",
 });
 
 const submit = () => {
-    form.post(route("admin.roles.store"));
+    props.edit
+        ? form.put(route("admin.roles.update", { id: props.role.id }))
+        : form.post(route("admin.roles.store"));
 };
+
+onMounted(() => {
+    if (props.edit) {
+        form.name = props.role.name;
+    }
+});
 </script>
 
 <template>
-    <Head title="Add new role" />
+    <Head :title="title" />
 
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Add new role
+                {{ title }}
             </h2>
         </template>
 
@@ -55,7 +78,7 @@ const submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Save
+                            {{ form.processing ? "Saving" : "Save" }}
                         </Button>
                     </div>
                 </form>

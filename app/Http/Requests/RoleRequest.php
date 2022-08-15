@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin\Role;
+namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
+use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,10 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
+        $model = $this->route('role');
+
         return [
-            'name'=>['required', 'string','max:255',Rule::unique("roles")],
+            'name' => ['required', 'string', 'max:255', Rule::unique(Role::class)->ignore($model->id ?? null)],
         ];
     }
 }
