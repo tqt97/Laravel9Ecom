@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             // ->has(Product::factory()->count(7))
             ->create([
                 'email' => 'admin@gmail.com',
-                'password' => bcrypt('12341234'),
+                'password' =>'12341234',
                 'name' => 'Super Admin',
             ]);
 
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             // ->has(Product::factory()->count(9))
             ->create([
                 'email' => 'editor@editor.com',
-                'password' => bcrypt('12341234'),
+                'password' => '12341234',
                 'name' => 'Editor',
             ]);
 

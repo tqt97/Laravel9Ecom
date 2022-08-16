@@ -14,7 +14,7 @@ import Actions from "@/admin/Components/Table/Actions.vue";
 import Button from "@/admin/Components/Button.vue";
 import Modal from "@/admin/Components/Modal.vue";
 
-// import Filters from "./Filters.vue";
+import Filters from "./Filters.vue";
 
 import useDeleteItem from "@/admin/Composables/useDeleteItem";
 import useFilters from "@/admin/Composables/useFilters";
@@ -69,7 +69,7 @@ const { filters, isLoading } = useFilters({
         </template>
 
         <Container>
-            <!-- <Filters v-model="filters" :roles="roles" /> -->
+            <Filters v-model="filters" :roles="roles" />
 
             <Button
                 v-if="can.create"

@@ -1,6 +1,6 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/inertia-vue3";
-import { onMounted } from "vue";
+import {Head, useForm} from "@inertiajs/inertia-vue3";
+import {onMounted} from "vue";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Container from "@/admin/Components/Container.vue";
 import Card from "@/admin/Components/Card.vue";
@@ -39,10 +39,10 @@ const form = useForm({
 const submit = () => {
     props.edit
         ? form.put(
-              route(`admin.${props.routeResourceName}.update`, {
-                  id: props.item.id,
-              })
-          )
+            route(`admin.${props.routeResourceName}.update`, {
+                id: props.item.id,
+            })
+        )
         : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 onMounted(() => {
@@ -54,7 +54,8 @@ onMounted(() => {
 });
 </script>
 <template>
-    <Head :title="title" />
+
+    <Head :title=" title " />
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -63,45 +64,27 @@ onMounted(() => {
         </template>
         <Container>
             <Card>
-                <form @submit.prevent="submit">
+                <form @submit.prevent=" submit ">
                     <div class="grid grid-cols-2 gap-6">
-                        <InputGroup
-                            label="Name"
-                            v-model="form.name"
-                            :error-message="form.errors.name"
-                            required
-                        />
-                        <InputGroup
-                            type="email"
-                            label="Email"
-                            v-model="form.email"
-                            :error-message="form.errors.email"
-                            required
-                        />
-                        <InputGroup
-                            type="password"
-                            label="Password"
-                            v-model="form.password"
-                            :error-message="form.errors.password"
-                            :required="!edit"
-                        />
-                        <InputGroup
-                            type="password"
-                            label="Confirm Password"
-                            v-model="form.passwordConfirmation"
-                            :error-message="form.errors.passwordConfirmation"
-                            :required="!edit"
-                        />
-                        <SelectGroup
-                            label="Role"
-                            v-model="form.roleId"
-                            :items="roles"
-                            :error-message="form.errors.roleId"
-                            required
-                        />
+                        <InputGroup label="Name" v-model=" form.name "
+                            :error-message=" form.errors.name " required />
+                        <InputGroup type="email" label="Email"
+                            v-model=" form.email "
+                            :error-message=" form.errors.email " required />
+                        <InputGroup type="password" label="Password"
+                            v-model=" form.password "
+                            :error-message=" form.errors.password "
+                            :required=" !edit " />
+                        <InputGroup type="password" label="Confirm Password"
+                            v-model=" form.passwordConfirmation "
+                            :error-message=" form.errors.passwordConfirmation "
+                            :required=" !edit " />
+                        <SelectGroup label="Role" v-model=" form.roleId "
+                            :items=" roles " :error-message=" form.errors.roleId "
+                            required />
                     </div>
                     <div class="mt-4">
-                        <Button :disabled="form.processing">
+                        <Button :disabled=" form.processing ">
                             {{ form.processing ? "Saving..." : "Save" }}
                         </Button>
                     </div>

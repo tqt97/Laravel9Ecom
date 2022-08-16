@@ -35,6 +35,14 @@ class UserController extends Controller
             ])
             ->with(['roles:roles.id,roles.name'])
             ->when($request->name, fn (Builder $builder, $name) => $builder->where('name', 'like', "%{$name}%"))
+            ->when($request->email, fn (Builder $builder, $email) => $builder->where('email', 'like', "%{$email}%"))
+            ->when(
+                $request->roleId,
+                fn (Builder $builder, $roleId) => $builder->whereHas(
+                    'roles',
+                    fn (Builder $builder) => $builder->where('roles.id', $roleId)
+                )
+            )
             ->latest('id')
             ->paginate(10);
 
@@ -65,6 +73,7 @@ class UserController extends Controller
             ],
             'filters' => (object) $request->all(),
             'routeResourceName' => $this->routeResourceName,
+            'roles' => RoleResource::collection(Role::get(['id', 'name'])),
             'can' => [
                 'create' => $request->user()->can('create user'),
             ],
@@ -83,8 +92,8 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        $user = User::create($request->safe()->only(['name', 'email', 'password']));
 
+        $user = User::create($request->safe()->only(['name', 'email', 'password']));
         $user->assignRole($request->roleId);
 
         return redirect()->route("admin.{$this->routeResourceName}.index")->with('success', 'User created successfully.');
