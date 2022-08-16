@@ -1,5 +1,5 @@
-import {ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
+import {ref} from "vue";
 
 export default function (params) {
     const {routeResourceName} = params;

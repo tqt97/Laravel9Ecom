@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\PermissionResource;
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,18 +15,20 @@ class RoleResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $this->when($this->name, $this->name),
+            'email' => $this->when($this->email, $this->email),
+            'is_email_verified' => $this->when($this->email_verified_at, function () {
+                return $this->email_verified_at !== null;
+            }),
             'created_at_formatted' => $this->when($this->created_at, function () {
-                // return $this->created_at->format('Y-m-d H:i:s');
                 return $this->created_at->toDayDateTimeString();
             }),
-            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
+            'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'can' => [
-                'edit' => $request->user()?->can('edit role'),
-                'delete' => $request->user()?->can('delete role'),
+                'edit' => $request->user()?->can('edit permission'),
+                'delete' => $request->user()?->can('delete permission'),
             ],
         ];
     }

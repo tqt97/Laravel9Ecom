@@ -26,18 +26,6 @@ const showingNavigationDropdown = ref(false);
                                 <BreezeApplicationLogo
                                     class="block h-9 w-auto text-red-500" />
                                 </Link>
-                                <BreezeNavLink
-                                    :href=" route( 'admin.dashboard' ) "
-                                    class="block h-9 w-auto"
-                                    :active=" route().current( 'admin.dashboard' ) ">
-                                    Dashboard
-                                </BreezeNavLink>
-                                <BreezeNavLink
-                                    :href=" route( 'admin.roles.index' ) "
-                                    class="block h-9 w-auto"
-                                    :active=" route().current( 'admin.roles.*' ) ">
-                                    Roles
-                                </BreezeNavLink>
                             </div>
 
                             <!-- Navigation Links -->

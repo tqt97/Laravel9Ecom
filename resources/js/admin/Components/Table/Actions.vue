@@ -23,11 +23,11 @@ defineProps({
     <div class="flex items-center space-x-2">
         <button v-if=" showEdit ">
             <Link :href=" editLink ">
-            <Edit class="w-4 h-4" />
+            <Edit class="w-4 h-4 text-blue-500" />
             </Link>
         </button>
         <button v-if=" showDelete " @click=" $emit( 'deleteClicked', $event ) ">
-            <Trash class="w-4 h-4" />
+            <Trash class="w-4 h-4 text-red-500" />
         </button>
     </div>
 </template>

@@ -89,7 +89,7 @@ const modalSizeClass = computed(() => `modal-${props.size}`);
                 </div>
 
                 <div v-if=" $slots.footer "
-                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md bg-re">
                     <slot name="footer"></slot>
                 </div>
             </div>

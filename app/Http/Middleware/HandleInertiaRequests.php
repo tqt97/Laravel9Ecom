@@ -44,8 +44,50 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'flash'=>[
+            'flash' => [
                 'success' => $request->session()->get('success'),
+            ],
+            'menus' => [
+                [
+                    'label' => 'Dashboard',
+                    'url' => route('admin.dashboard'),
+                    'isActive' => $request->routeIs('admin.dashboard'),
+                    'isVisible' => true,
+                ],
+                [
+                    'label' => 'Permissions',
+                    'url' => route('admin.permissions.index'),
+                    'isActive' => $request->routeIs('admin.permissions.*'),
+                    'isVisible' => true,
+
+                    // 'isVisible' => $request->user()?->can('view permissions module'),
+                ],
+                [
+                    'label' => 'Roles',
+                    'url' => route('admin.roles.index'),
+                    'isActive' => $request->routeIs('admin.roles.*'),
+                    'isVisible' => true,
+
+                    // 'isVisible' => $request->user()?->can('view roles module'),
+                ],
+                [
+                    'label' => 'Users',
+                    'url' => route('admin.users.index'),
+                    'isActive' => $request->routeIs('admin.users.*'),
+                    'isVisible' => $request->user()?->can('view users module'),
+                ],
+                // [
+                //     'label' => 'Categories',
+                //     'url' => route('admin.categories.index'),
+                //     'isActive' => $request->routeIs('admin.categories.*'),
+                //     'isVisible' => $request->user()?->can('view categories module'),
+                // ],
+                // [
+                //     'label' => 'Products',
+                //     'url' => route('admin.products.index'),
+                //     'isActive' => $request->routeIs('admin.products.*'),
+                //     'isVisible' => $request->user()?->can('view products module'),
+                // ],
             ]
         ]);
     }

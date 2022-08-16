@@ -1,12 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
 import Button from "@/admin/Components/Button.vue";
 
-import BreezeCheckbox from "@/admin/Components/Checkbox.vue";
 import BreezeInput from "@/admin/Components/Input.vue";
 import BreezeInputError from "@/admin/Components/InputError.vue";
 import BreezeLabel from "@/admin/Components/Label.vue";
@@ -16,30 +14,31 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    role: {
+    title: {
+        type: String,
+    },
+    item: {
         type: Object,
         default: () => ({}),
     },
-    title: {
+    routeResourceName: {
         type: String,
+        required: true,
     },
 });
 
 const form = useForm({
-    name: "",
+    name: props.item.name ?? "",
 });
 
 const submit = () => {
     props.edit
-        ? form.put(route("admin.roles.update", { id: props.role.id }))
-        : form.post(route("admin.roles.store"));
+        ? form.put(
+              route(`admin.${props.routeResourceName}.update`, { id: props.item.id })
+          )
+        : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 
-onMounted(() => {
-    if (props.edit) {
-        form.name = props.role.name;
-    }
-});
 </script>
 
 <template>
@@ -78,7 +77,7 @@ onMounted(() => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            {{ form.processing ? "Saving" : "Save" }}
+                            {{ form.processing ? "Saving..." : "Save" }}
                         </Button>
                     </div>
                 </form>

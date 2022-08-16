@@ -1,31 +1,59 @@
 <script setup>
+import { Head, useForm } from "@inertiajs/inertia-vue3";
+
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
 import Button from "@/admin/Components/Button.vue";
 
-import BreezeCheckbox from "@/admin/Components/Checkbox.vue";
 import BreezeInput from "@/admin/Components/Input.vue";
 import BreezeInputError from "@/admin/Components/InputError.vue";
 import BreezeLabel from "@/admin/Components/Label.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import Permissions from "./Permissions.vue";
+
+const props = defineProps({
+    edit: {
+        type: Boolean,
+        default: false,
+    },
+    title: {
+        type: String,
+    },
+    item: {
+        type: Object,
+        default: () => ({}),
+    },
+    routeResourceName: {
+        type: String,
+        required: true,
+    },
+    permissions: {
+        type: Array,
+    },
+});
 
 const form = useForm({
-    name: "",
+    name: props.item.name ?? "",
 });
 
 const submit = () => {
-    form.post(route("admin.roles.store"));
+    props.edit
+        ? form.put(
+              route(`admin.${props.routeResourceName}.update`, {
+                  id: props.item.id,
+              })
+          )
+        : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 </script>
 
 <template>
-    <Head title="Add new role" />
+    <Head :title="title" />
 
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Add new role
+                {{ title }}
             </h2>
         </template>
 
@@ -55,11 +83,17 @@ const submit = () => {
                             :class="{ 'opacity-25': form.processing }"
                             :disabled="form.processing"
                         >
-                            Save
+                            {{ form.processing ? "Saving..." : "Save" }}
                         </Button>
                     </div>
                 </form>
             </Card>
         </Container>
+        <Permissions
+            v-if="edit"
+            class="mt-6"
+            :role="item"
+            :permissions="permissions"
+        />
     </BreezeAuthenticatedLayout>
 </template>

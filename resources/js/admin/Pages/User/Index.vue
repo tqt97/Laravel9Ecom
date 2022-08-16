@@ -14,7 +14,7 @@ import Actions from "@/admin/Components/Table/Actions.vue";
 import Button from "@/admin/Components/Button.vue";
 import Modal from "@/admin/Components/Modal.vue";
 
-import Filters from "./Filters.vue";
+// import Filters from "./Filters.vue";
 
 import useDeleteItem from "@/admin/Composables/useDeleteItem";
 import useFilters from "@/admin/Composables/useFilters";
@@ -41,6 +41,7 @@ const props = defineProps({
         required: true,
     },
     can: Object,
+    roles: Array,
 });
 
 const {
@@ -68,9 +69,10 @@ const { filters, isLoading } = useFilters({
         </template>
 
         <Container>
-            <Filters v-model="filters" />
+            <!-- <Filters v-model="filters" :roles="roles" /> -->
 
-            <Button v-if="can.create"
+            <Button
+                v-if="can.create"
                 :href="route(`admin.${routeResourceName}.create`)"
                 class="mb-5"
             >
@@ -81,6 +83,19 @@ const { filters, isLoading } = useFilters({
                     <template v-slot="{ item }">
                         <Td>
                             {{ item.name }}
+                        </Td>
+                        <Td>
+                            {{ item.email }}
+                        </Td>
+                        <Td>
+                            <Button
+                                v-for="role in item.roles"
+                                :key="role.id"
+                                color="blue"
+                                small
+                            >
+                                {{ role.name }}
+                            </Button>
                         </Td>
                         <Td>
                             {{ item.created_at_formatted }}

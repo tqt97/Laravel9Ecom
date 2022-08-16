@@ -70,7 +70,8 @@ const { filters, isLoading } = useFilters({
         <Container>
             <Filters v-model="filters" />
 
-            <Button v-if="can.create"
+            <Button
+                v-if="can.create"
                 :href="route(`admin.${routeResourceName}.create`)"
                 class="mb-5"
             >

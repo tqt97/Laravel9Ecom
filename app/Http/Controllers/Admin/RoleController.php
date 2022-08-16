@@ -8,10 +8,21 @@ use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoleResource;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\PermissionResource;
 
 class RoleController extends Controller
 {
+    private string $routeResourceName = 'roles';
+
+    public function __construct()
+    {
+        $this->middleware('can:view roles list')->only('index');
+        $this->middleware('can:create role')->only(['create', 'store']);
+        $this->middleware('can:edit role')->only(['edit', 'update']);
+        $this->middleware('can:delete role')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,22 +30,15 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        // $roles = Role::query()
-        //     ->select([
-        //         'id',
-        //         'name',
-        //         'created_at',
-        //     ])
-        //     ->when($request->name, fn (Builder $builder, $name) => $builder->where('name', 'like', "%{$name}%"))
-        //     ->latest('id')
-        //     ->paginate(10);
-        $roles = Role::select(['id', 'name', 'created_at'])
+        $roles = Role::query()
+            ->select(['id', 'name', 'created_at'])
             ->when($request->name, fn (Builder $builder, $name) => $builder->where('name', 'like', "%{$name}%"))
-            ->latest('id')->paginate(10);
+            ->latest('id')
+            ->paginate(10);
 
         return Inertia::render('Role/Index', [
             'title' => 'List Roles',
-            'roles' => RoleResource::collection($roles),
+            'items' => RoleResource::collection($roles),
             'headers' => [
                 [
                     'label' => 'Name',
@@ -50,10 +54,10 @@ class RoleController extends Controller
                 ],
             ],
             'filters' => (object) $request->all(),
-            // 'routeResourceName' => $this->routeResourceName,
-            // 'can' => [
-            //     'create' => $request->user()->can('create role'),
-            // ],
+            'routeResourceName' => $this->routeResourceName,
+            'can' => [
+                'create' => $request->user()->can('create role'),
+            ],
         ]);
     }
 
@@ -64,9 +68,10 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Role/Create', [
+        return Inertia::render('Role/Form', [
             'edit' => false,
             'title' => 'Create a new role',
+            'routeResourceName' => $this->routeResourceName,
         ]);
     }
 
@@ -78,8 +83,8 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        Role::create($request->validated());
-        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully ! ');
+        $role = Role::create($request->validated());
+        return redirect()->route("admin.{$this->routeResourceName}.edit", $role)->with('success', 'Role created successfully ! ');
     }
 
     /**
@@ -101,10 +106,14 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return Inertia::render('Role/Create', [
-            'role' => new RoleResource($role),
+        $role->load(['permissions:permissions.id,permissions.name']);
+
+        return Inertia::render('Role/Form', [
+            'item' => new RoleResource($role),
             'title' => 'Edit Role',
             'edit' => true,
+            'routeResourceName' => $this->routeResourceName,
+            'permissions' => PermissionResource::collection(Permission::get(['id', 'name'])),
         ]);
     }
 
@@ -118,7 +127,7 @@ class RoleController extends Controller
     public function update(RoleRequest $request, Role $role)
     {
         $role->update($request->validated());
-        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully!');
+        return redirect()->route("admin.{$this->routeResourceName}.index")->with('success', 'Role updated successfully!');
     }
 
     /**
