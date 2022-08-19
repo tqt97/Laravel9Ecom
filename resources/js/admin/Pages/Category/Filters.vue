@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from "vue";
+import { ref, watch } from "vue";
 
 import Card from "@/admin/Components/Card.vue";
 import InputGroup from "@/admin/Components/InputGroup.vue";
@@ -10,10 +10,10 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    roles: Array,
+    categories: Array,
 });
 const emits = defineEmits(["update:modelValue"]);
-const filters = ref({...props.modelValue});
+const filters = ref({ ...props.modelValue });
 
 watch(
     filters,
@@ -31,11 +31,20 @@ watch(
         <template #header> Filters </template>
 
         <form class="grid grid-cols-3 gap-8">
-                <InputGroup label="Name" v-model=" filters.name " />
-                <InputGroup label="Email" v-model=" filters.email "
-                    type="email" />
-                <SelectGroup label="Role" v-model=" filters.roleId "
-                    :items=" roles " />
+            <InputGroup label="Name" v-model="filters.name" />
+            <SelectGroup
+                label="Category"
+                v-model="filters.parentId"
+                :items="categories"
+            />
+            <SelectGroup
+                label="Status"
+                v-model="filters.active"
+                :items="[
+                    { id: 1, name: 'Active' },
+                    { id: 0, name: 'Inactive' },
+                ]"
+            />
         </form>
     </Card>
 </template>

@@ -1,24 +1,23 @@
 <script setup>
+import { onMounted, ref, watch } from "vue";
 import { Head } from "@inertiajs/inertia-vue3";
-// import { ref } from "vue";
-// import { Inertia } from "@inertiajs/inertia";
+import { Inertia } from "@inertiajs/inertia";
+
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
-
-import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
-
+import Card from "@/admin/Components/Card.vue";
 import Table from "@/admin/Components/Table/Table.vue";
 import Td from "@/admin/Components/Table/Td.vue";
 import Actions from "@/admin/Components/Table/Actions.vue";
-
 import Button from "@/admin/Components/Button.vue";
 import Modal from "@/admin/Components/Modal.vue";
-
+import Label from "@/admin/Components/Label.vue";
+import Input from "@/admin/Components/Input.vue";
 import AddNew from "@/admin/Components/AddNew.vue";
 import Filters from "./Filters.vue";
 
-import useDeleteItem from "@/admin/Composables/useDeleteItem";
-import useFilters from "@/admin/Composables/useFilters";
+import useDeleteItem from "@/admin/Composables/useDeleteItem.js";
+import useFilters from "@/admin/Composables/useFilters.js";
 
 const props = defineProps({
     title: {
@@ -42,17 +41,17 @@ const props = defineProps({
         required: true,
     },
     can: Object,
-    roles: Array,
+    rootCategories: Array,
 });
-
 const {
     deleteModal,
     itemToDelete,
     isDeleting,
     showDeleteModal,
     handleDeleteItem,
-} = useDeleteItem({ routeResourceName: props.routeResourceName });
-
+} = useDeleteItem({
+    routeResourceName: props.routeResourceName,
+});
 const { filters, isLoading } = useFilters({
     filters: props.filters,
     routeResourceName: props.routeResourceName,
@@ -74,12 +73,14 @@ const { filters, isLoading } = useFilters({
                 <Button
                     v-if="can.create"
                     :href="route(`admin.${routeResourceName}.create`)"
-                    >Add New</Button
                 >
+                    Add new
+                </Button>
                 <template #filters>
-                    <Filters v-model="filters" :roles="roles" />
+                    <Filters v-model="filters" :categories="rootCategories" />
                 </template>
             </AddNew>
+
             <Card :is-loading="isLoading">
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
@@ -87,16 +88,25 @@ const { filters, isLoading } = useFilters({
                             {{ item.name }}
                         </Td>
                         <Td>
-                            {{ item.email }}
+                            <Button
+                                v-if="item.children_count > 0"
+                                :href="
+                                    route(`admin.${routeResourceName}.index`, {
+                                        parentId: item.id,
+                                    })
+                                "
+                                small
+                            >
+                                {{ item.children_count }}
+                            </Button>
+                            <span v-else>{{ item.children_count }}</span>
                         </Td>
                         <Td>
                             <Button
-                                v-for="role in item.roles"
-                                :key="role.id"
-                                color="blue"
+                                :color="item.active ? 'green' : 'red'"
                                 small
                             >
-                                {{ role.name }}
+                                {{ item.active ? "Active" : "Inactive" }}
                             </Button>
                         </Td>
                         <Td>
@@ -119,15 +129,12 @@ const { filters, isLoading } = useFilters({
             </Card>
         </Container>
     </BreezeAuthenticatedLayout>
+
     <Modal v-model="deleteModal" :title="`Delete ${itemToDelete.name}`">
         Are you sure you want to delete this item?
 
         <template #footer>
-            <Button
-                @click="handleDeleteItem"
-                :disabled="isDeleting"
-                class="bg-red-500"
-            >
+            <Button @click="handleDeleteItem" :disabled="isDeleting">
                 <span v-if="isDeleting">Deleting</span>
                 <span v-else>Delete</span>
             </Button>

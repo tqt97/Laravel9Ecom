@@ -14,6 +14,7 @@ import Actions from "@/admin/Components/Table/Actions.vue";
 import Button from "@/admin/Components/Button.vue";
 import Modal from "@/admin/Components/Modal.vue";
 
+import AddNew from "@/admin/Components/AddNew.vue";
 import Filters from "./Filters.vue";
 
 import useDeleteItem from "@/admin/Composables/useDeleteItem";
@@ -68,15 +69,16 @@ const { filters, isLoading } = useFilters({
         </template>
 
         <Container>
-            <Filters v-model="filters" />
-
-            <Button
-                v-if="can.create"
-                :href="route(`admin.${routeResourceName}.create`)"
-                class="mb-5"
-            >
-                Add new
-            </Button>
+            <AddNew>
+                <Button
+                    v-if="can.create"
+                    :href="route(`admin.${routeResourceName}.create`)"
+                    >Add New</Button
+                >
+                <template #filters>
+                    <Filters v-model="filters" />
+                </template>
+            </AddNew>
             <Card :is-loading="isLoading">
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
