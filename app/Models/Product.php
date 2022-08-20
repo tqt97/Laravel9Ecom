@@ -30,7 +30,7 @@ class Product extends Model implements HasMedia
         'featured' => 'boolean',
         'show_on_slider' => 'boolean',
         'active' => 'boolean',
-        'description' => PurifyHtml::class,
+        // 'description' => PurifyHtml::class,
     ];
 
     public function categories()

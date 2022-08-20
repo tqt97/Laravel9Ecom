@@ -1,9 +1,11 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/inertia-vue3";
+import {Head, useForm} from "@inertiajs/inertia-vue3";
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Container from "@/admin/Components/Container.vue";
 import Card from "@/admin/Components/Card.vue";
-import Button from "@/admin/Components/SelectGroup.vue";
+import Button from "@/admin/Components/Button.vue";
+import InputGroup from "@/admin/Components/InputGroup.vue";
+import SelectGroup from "@/admin/Components/SelectGroup.vue";
 
 const props = defineProps({
     edit: {
@@ -32,23 +34,24 @@ const form = useForm({
     email: props.item.email ?? "",
     password: "",
     passwordConfirmation: "",
-    roleId: props.item.roles[0]?.id ?? "",
+    // roleId: props.item.roles[0]?.id ?? "",
+    roleId: props.edit ? (props.item.roles[0]?.id ?? "") : "",
 });
 
 const submit = () => {
     props.edit
         ? form.put(
-              route(`admin.${props.routeResourceName}.update`, {
-                  id: props.item.id,
-              })
-          )
+            route(`admin.${props.routeResourceName}.update`, {
+                id: props.item.id,
+            })
+        )
         : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 </script>
 
 <template>
 
-    <Head :title="title" />
+    <Head :title=" title " />
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -59,40 +62,32 @@ const submit = () => {
 
         <Container>
             <Card>
-                <form @submit.prevent="submit">
+                <form @submit.prevent=" submit ">
                     <div class="grid grid-cols-2 gap-6">
-                        <InputGroup label="Name"
-                                    v-model="form.name"
-                                    :error-message="form.errors.name"
-                                    required />
+                        <InputGroup label="Name" v-model=" form.name "
+                            :error-message=" form.errors.name " required />
 
-                        <InputGroup type="email"
-                                    label="Email"
-                                    v-model="form.email"
-                                    :error-message="form.errors.email"
-                                    required />
+                        <InputGroup type="email" label="Email"
+                            v-model=" form.email "
+                            :error-message=" form.errors.email " required />
 
-                        <InputGroup type="password"
-                                    label="Password"
-                                    v-model="form.password"
-                                    :error-message="form.errors.password"
-                                    :required="!edit" />
+                        <InputGroup type="password" label="Password"
+                            v-model=" form.password "
+                            :error-message=" form.errors.password "
+                            :required=" !edit " />
 
-                        <InputGroup type="password"
-                                    label="Confirm Password"
-                                    v-model="form.passwordConfirmation"
-                                    :error-message="form.errors.passwordConfirmation"
-                                    :required="!edit" />
+                        <InputGroup type="password" label="Confirm Password"
+                            v-model=" form.passwordConfirmation "
+                            :error-message=" form.errors.passwordConfirmation "
+                            :required=" !edit " />
 
-                        <SelectGroup label="Role"
-                                     v-model="form.roleId"
-                                     :items="roles"
-                                     :error-message="form.errors.roleId"
-                                     required />
+                        <SelectGroup label="Role" v-model=" form.roleId "
+                            :items=" roles " :error-message=" form.errors.roleId "
+                            required />
                     </div>
 
                     <div class="mt-4">
-                        <Button :disabled="form.processing">
+                        <Button :disabled=" form.processing ">
                             {{ form.processing ? 'Saving...' : 'Save' }}
                         </Button>
                     </div>

@@ -114,7 +114,7 @@ const deleteImage = (imageId) => {
                         <div v-if="edit" class="col-span-2">
                             <div v-if="item.images.length > 0">
                                 <div>Images:</div>
-                                <div class="grid grid-cols-3 gap-6">
+                                <div class="grid grid-cols-3 gap-6 mb-2">
                                     <div
                                         v-for="image in item.images"
                                         :key="image.id"
@@ -131,7 +131,7 @@ const deleteImage = (imageId) => {
                                         </button>
                                         <div
                                             v-html="image.html"
-                                            class="[&_img]:h-64 [&_img]:w-full [&_img]:object-contain"
+                                            class="[&_img]:h-20 [&_img]:w-20 [&_img]:object-contain"
                                         ></div>
                                     </div>
                                 </div>
@@ -202,7 +202,6 @@ const deleteImage = (imageId) => {
                                 :error-message="form.errors.description"
                             />
                         </div>
-
                         <div class="col-span-2 flex items-center space-x-4">
                             <CheckboxGroup
                                 label="Active"
