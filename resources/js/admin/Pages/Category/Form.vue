@@ -1,8 +1,10 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/inertia-vue3";
-import { onMounted, watch } from "vue";
+import { watch } from "vue";
+
 import kebabCase from "lodash/kebabCase";
 import replace from "lodash/replace";
+
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Container from "@/admin/Components/Container.vue";
 import Card from "@/admin/Components/Card.vue";
@@ -10,6 +12,7 @@ import Button from "@/admin/Components/Button.vue";
 import InputGroup from "@/admin/Components/InputGroup.vue";
 import SelectGroup from "@/admin/Components/SelectGroup.vue";
 import CheckboxGroup from "@/admin/Components/CheckboxGroup.vue";
+
 const props = defineProps({
     edit: {
         type: Boolean,
@@ -32,16 +35,17 @@ const props = defineProps({
     },
 });
 const form = useForm({
-    name: "",
-    slug: "",
-    active: true,
-    parentId: "",
+    name: props.item.name ?? "",
+    slug: props.item.slug ?? "",
+    active: props.item.active ?? false,
+    parentId: props.item.parent_id ?? "",
 });
+
 watch(
     () => form.name,
     (name) => {
         // if (!props.edit) {
-            form.slug = kebabCase(replace(name, /&./, "and"));
+        form.slug = kebabCase(replace(name, /&./, "and"));
         // }
     }
 );
@@ -54,14 +58,7 @@ const submit = () => {
           )
         : form.post(route(`admin.${props.routeResourceName}.store`));
 };
-onMounted(() => {
-    if (props.edit) {
-        form.name = props.item.name;
-        form.slug = props.item.slug;
-        form.active = props.item.active;
-        form.parentId = props.item.parent_id;
-    }
-});
+
 </script>
 
 <template>

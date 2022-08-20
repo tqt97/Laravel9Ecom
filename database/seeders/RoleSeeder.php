@@ -23,7 +23,7 @@ class RoleSeeder extends Seeder
 
         $editor = Role::create(['name' => 'Editor']);
 
-        $editor = User::find(2)->assignRole($editor);
+        User::find(2)->assignRole($editor);
 
         Permission::create(['name' => 'view permissions module']);
         Permission::create(['name' => 'view permissions list']);

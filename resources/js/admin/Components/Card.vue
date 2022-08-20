@@ -13,7 +13,7 @@ defineProps({
 
 <template>
     <div
-        class="bg-white overflow-hidden mt-4 shadow-sm sm:rounded-lg border-b border-gray-200"
+        class="bg-white overflow-hidden mt-4 shadow-md sm:rounded-lg border-b border-gray-200"
     >
         <div v-if="isLoading" class="w-full bg-gray-200 h-1">
             <div class="bg-blue-600 h-1 animate-progress"></div>

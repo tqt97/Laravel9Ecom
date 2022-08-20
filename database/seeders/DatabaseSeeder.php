@@ -26,18 +26,20 @@ class DatabaseSeeder extends Seeder
             // ->has(Product::factory()->count(7))
             ->create([
                 'email' => 'admin@gmail.com',
-                'password' =>'12341234',
+                'password' => '12341234',
                 'name' => 'Super Admin',
             ]);
 
         User::factory()
             // ->has(Product::factory()->count(9))
             ->create([
-                'email' => 'editor@editor.com',
+                'email' => 'editor@gmail.com',
                 'password' => '12341234',
                 'name' => 'Editor',
             ]);
 
         $this->call(RoleSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(ProductSeeder::class);
     }
 }

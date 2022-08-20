@@ -20,7 +20,6 @@ class RoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'created_at_formatted' => $this->when($this->created_at, function () {
-                // return $this->created_at->format('Y-m-d H:i:s');
                 return $this->created_at->toDayDateTimeString();
             }),
             'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),

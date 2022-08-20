@@ -53,7 +53,7 @@ const {
     handleDeleteItem,
 } = useDeleteItem({ routeResourceName: props.routeResourceName });
 
-const { filters, isLoading } = useFilters({
+const { filters, isLoading, isFilled } = useFilters({
     filters: props.filters,
     routeResourceName: props.routeResourceName,
 });
@@ -70,7 +70,7 @@ const { filters, isLoading } = useFilters({
         </template>
 
         <Container>
-            <AddNew>
+            <AddNew :show="isFilled">
                 <Button
                     v-if="can.create"
                     :href="route(`admin.${routeResourceName}.create`)"
@@ -80,7 +80,7 @@ const { filters, isLoading } = useFilters({
                     <Filters v-model="filters" :roles="roles" />
                 </template>
             </AddNew>
-            <Card :is-loading="isLoading">
+            <Card :is-loading="isLoading" no-padding>
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
                         <Td>

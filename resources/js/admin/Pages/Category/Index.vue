@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+// import { onMounted, ref, watch } from "vue";
 import { Head } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
+// import { Inertia } from "@inertiajs/inertia";
 
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Container from "@/admin/Components/Container.vue";
@@ -52,7 +52,7 @@ const {
 } = useDeleteItem({
     routeResourceName: props.routeResourceName,
 });
-const { filters, isLoading } = useFilters({
+const { filters, isLoading, isFilled } = useFilters({
     filters: props.filters,
     routeResourceName: props.routeResourceName,
 });
@@ -69,7 +69,7 @@ const { filters, isLoading } = useFilters({
         </template>
 
         <Container>
-            <AddNew>
+            <AddNew :show="isFilled">
                 <Button
                     v-if="can.create"
                     :href="route(`admin.${routeResourceName}.create`)"
@@ -81,7 +81,7 @@ const { filters, isLoading } = useFilters({
                 </template>
             </AddNew>
 
-            <Card :is-loading="isLoading">
+            <Card :is-loading="isLoading" no-padding>
                 <Table :headers="headers" :items="items">
                     <template v-slot="{ item }">
                         <Td>

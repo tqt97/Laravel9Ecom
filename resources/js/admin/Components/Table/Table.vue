@@ -20,7 +20,7 @@ defineProps({
         <div class="inline-block min-w-full sm:px-6 lg:px-8">
             <div class="overflow-x-auto">
                 <table class="min-w-full">
-                    <thead class="border-b">
+                    <thead class="border-b bg-gray-300 text-white" >
                         <tr>
                             <Th
                                 v-for="header in headers"

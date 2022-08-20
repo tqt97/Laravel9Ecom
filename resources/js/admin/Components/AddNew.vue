@@ -4,7 +4,14 @@ import { ref } from "vue";
 import Button from "@/admin/Components/Button.vue";
 import FilterIcon from "@/admin/Components/Icon/Filter.vue";
 
-const showFilters = ref(false);
+const props = defineProps({
+    show: {
+        type: Boolean,
+        default: false,
+    }
+})
+const showFilters = ref(props.show ?? false);
+
 </script>
 
 <template>

@@ -108,7 +108,7 @@ const showingNavigationDropdown = ref(false);
                         <BreezeResponsiveNavLink
                             :href=" route( 'admin.roles.index' ) "
                             :active=" route().current( 'admin.roles.*' ) ">
-                            Dashboard
+                            Role
                         </BreezeResponsiveNavLink>
                     </div>
 
@@ -141,7 +141,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <div class="py-12">
+                <div class="py-4">
                     <slot />
                 </div>
             </main>

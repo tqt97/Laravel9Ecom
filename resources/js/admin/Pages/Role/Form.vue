@@ -5,7 +5,6 @@ import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
 import Container from "@/admin/Components/Container.vue";
 import Button from "@/admin/Components/Button.vue";
-
 import BreezeInput from "@/admin/Components/Input.vue";
 import BreezeInputError from "@/admin/Components/InputError.vue";
 import BreezeLabel from "@/admin/Components/Label.vue";
