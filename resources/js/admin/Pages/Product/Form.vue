@@ -1,6 +1,6 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/inertia-vue3";
-import { computed, watch } from "vue";
+import {Head, useForm} from "@inertiajs/inertia-vue3";
+import {computed, watch} from "vue";
 
 import kebabCase from "lodash/kebabCase";
 import replace from "lodash/replace";
@@ -15,7 +15,7 @@ import CheckboxGroup from "@/admin/Components/CheckboxGroup.vue";
 import EditorGroup from "@/admin/Components/EditorGroup.vue";
 import ImageUpload from "@/admin/Components/ImageUpload.vue";
 import CrossIcon from "@/admin/Components/Icon/Cross.vue";
-import { Inertia } from "@inertiajs/inertia";
+import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
     edit: {
@@ -81,10 +81,10 @@ watch(
 const submit = () => {
     props.edit
         ? form.put(
-              route(`admin.${props.routeResourceName}.update`, {
-                  id: props.item.id,
-              })
-          )
+            route(`admin.${props.routeResourceName}.update`, {
+                id: props.item.id,
+            })
+        )
         : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 
@@ -93,12 +93,13 @@ const maxUploadImageCount = 3;
 const deleteImage = (imageId) => {
     if (!confirm("Are you sure you want to delete this image?")) return;
 
-    Inertia.post(route("admin.images.destroy", { id: imageId }));
+    Inertia.post(route("admin.images.destroy", {id: imageId}));
 };
 </script>
 
 <template>
-    <Head :title="title" />
+
+    <Head :title=" title " />
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -109,119 +110,84 @@ const deleteImage = (imageId) => {
 
         <Container>
             <Card>
-                <form @submit.prevent="submit">
+                <form @submit.prevent=" submit ">
                     <div class="grid grid-cols-2 gap-6">
-                        <div v-if="edit" class="col-span-2">
-                            <div v-if="item.images.length > 0">
+                        <div v-if=" edit " class="col-span-2">
+                            <div v-if=" item.images.length > 0 ">
                                 <div>Images:</div>
                                 <div class="grid grid-cols-3 gap-6 mb-2">
-                                    <div
-                                        v-for="image in item.images"
-                                        :key="image.id"
-                                        class="bg-gray-50 p-4 rounded-md relative"
-                                    >
-                                        <button
-                                            type="button"
+                                    <div v-for="image in item.images"
+                                        :key=" image.id "
+                                        class="bg-gray-50 p-4 rounded-md relative">
+                                        <button type="button"
                                             class="absolute right-4 top-4 rounded-full p-2 transition-colors duration-200 hover:bg-red-500 hover:text-white"
                                             @click.prevent="
-                                                deleteImage(image.id)
-                                            "
-                                        >
+                                                deleteImage( image.id )
+                                            ">
                                             <CrossIcon class="w-6 h-6" />
                                         </button>
-                                        <div
-                                            v-html="image.html"
-                                            class="[&_img]:h-20 [&_img]:w-20 [&_img]:object-contain"
-                                        ></div>
+                                        <div v-html=" image.html "
+                                            class="[&_img]:h-20 [&_img]:w-20 [&_img]:object-contain">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <ImageUpload
-                                v-if="item.images.length < maxUploadImageCount"
-                                model-type="product"
-                                :model-id="item.id"
+                                v-if=" item.images.length < maxUploadImageCount "
+                                model-type="product" :model-id=" item.id "
                                 :maxFiles="
                                     maxUploadImageCount - item.images.length
-                                "
-                            />
+                                " />
                         </div>
 
-                        <InputGroup
-                            label="Name"
-                            v-model="form.name"
-                            :error-message="form.errors.name"
-                            required
-                        />
+                        <InputGroup label="Name" v-model=" form.name "
+                            :error-message=" form.errors.name " required />
 
-                        <InputGroup
-                            label="Slug"
-                            v-model="form.slug"
-                            :error-message="form.errors.slug"
-                            required
-                        />
+                        <InputGroup label="Slug" v-model=" form.slug "
+                            :error-message=" form.errors.slug " required />
 
-                        <InputGroup
-                            label="Cost Price"
-                            type="number"
-                            v-model="form.costPrice"
-                            :error-message="form.errors.costPrice"
-                            required
-                        />
+                        <InputGroup label="Cost Price" type="number"
+                            v-model=" form.costPrice "
+                            :error-message=" form.errors.costPrice " required />
 
-                        <InputGroup
-                            label="Selling Price"
-                            type="number"
-                            v-model="form.price"
-                            :error-message="form.errors.price"
-                            required
-                        />
+                        <InputGroup label="Selling Price" type="number"
+                            v-model=" form.price "
+                            :error-message=" form.errors.price " required />
 
                         <div class="col-span-2">
                             <div class="grid grid-cols-2 gap-6">
-                                <SelectGroup
-                                    label="Category"
-                                    v-model="form.categoryId"
-                                    :items="categories"
-                                    :error-message="form.errors.categoryId"
-                                />
+                                <SelectGroup label="Category"
+                                    v-model=" form.categoryId "
+                                    :items=" categories "
+                                    :error-message=" form.errors.categoryId " />
 
-                                <SelectGroup
-                                    v-if="subCategories.length > 0"
+                                <SelectGroup v-if=" subCategories.length > 0 "
                                     label="Sub Category"
-                                    v-model="form.subCategoryId"
-                                    :items="subCategories"
-                                    :error-message="form.errors.subCategoryId"
-                                />
+                                    v-model=" form.subCategoryId "
+                                    :items=" subCategories "
+                                    :error-message=" form.errors.subCategoryId " />
                             </div>
                         </div>
 
                         <div class="col-span-2">
-                            <EditorGroup
-                                label="Description"
-                                v-model="form.description"
-                                :error-message="form.errors.description"
-                            />
+                            <EditorGroup label="Description"
+                                v-model=" form.description "
+                                :error-message=" form.errors.description " />
                         </div>
                         <div class="col-span-2 flex items-center space-x-4">
-                            <CheckboxGroup
-                                label="Active"
-                                v-model:checked="form.active"
-                            />
+                            <CheckboxGroup label="Active"
+                                v-model:checked=" form.active " />
 
-                            <CheckboxGroup
-                                label="Featured"
-                                v-model:checked="form.featured"
-                            />
+                            <CheckboxGroup label="Featured"
+                                v-model:checked=" form.featured " />
 
-                            <CheckboxGroup
-                                label="Show on Slider"
-                                v-model:checked="form.showOnSlider"
-                            />
+                            <CheckboxGroup label="Show on Slider"
+                                v-model:checked=" form.showOnSlider " />
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <Button :disabled="form.processing">
+                        <Button :disabled=" form.processing ">
                             {{ form.processing ? "Saving..." : "Save" }}
                         </Button>
                     </div>

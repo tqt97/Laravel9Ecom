@@ -128,7 +128,7 @@ const { filters, isLoading, isFilled } = useFilters({
                 :disabled="isDeleting"
                 class="bg-red-500"
             >
-                <span v-if="isDeleting">Deleting</span>
+                <span v-if="isDeleting">Deleting ...</span>
                 <span v-else>Delete</span>
             </Button>
         </template>

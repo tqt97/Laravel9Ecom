@@ -135,7 +135,7 @@ const { filters, isLoading, isFilled } = useFilters({
 
         <template #footer>
             <Button @click="handleDeleteItem" :disabled="isDeleting">
-                <span v-if="isDeleting">Deleting</span>
+                <span v-if="isDeleting">Deleting ...</span>
                 <span v-else>Delete</span>
             </Button>
         </template>

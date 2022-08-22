@@ -22,6 +22,7 @@
     "dependencies": {
         "@tinymce/tinymce-vue": "^4.0.7",
         "dropzone": "^6.0.0-beta.2",
-        "tw-elements": "^1.0.0-alpha12"
+        "tw-elements": "^1.0.0-alpha12",
+        "vue-axios": "^3.4.1"
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/inertia-vue3";
+import {Head, useForm} from "@inertiajs/inertia-vue3";
 
 import BreezeAuthenticatedLayout from "@/admin/Layouts/Authenticated.vue";
 import Card from "@/admin/Components/Card.vue";
@@ -38,16 +38,17 @@ const form = useForm({
 const submit = () => {
     props.edit
         ? form.put(
-              route(`admin.${props.routeResourceName}.update`, {
-                  id: props.item.id,
-              })
-          )
+            route(`admin.${props.routeResourceName}.update`, {
+                id: props.item.id,
+            })
+        )
         : form.post(route(`admin.${props.routeResourceName}.store`));
 };
 </script>
 
 <template>
-    <Head :title="title" />
+
+    <Head :title=" title " />
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -58,41 +59,27 @@ const submit = () => {
 
         <Container>
             <Card>
-                <form @submit.prevent="submit">
+                <form @submit.prevent=" submit ">
                     <div>
                         <BreezeLabel for="name" value="Name" />
-                        <BreezeInput
-                            id="name"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.name"
-                            required
-                            autofocus
-                            autocomplete="name"
-                        />
-                        <BreezeInputError
-                            class="mt-2"
-                            :message="form.errors.name"
-                        />
+                        <BreezeInput id="name" type="text"
+                            class="mt-1 block w-full" v-model=" form.name "
+                            required autofocus autocomplete="name" />
+                        <BreezeInputError class="mt-2"
+                            :message=" form.errors.name " />
                     </div>
 
                     <div class="flex items-center justify-end mt-4">
-                        <Button
-                            class="ml-4"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                        >
+                        <Button class="ml-4"
+                            :class=" { 'opacity-25': form.processing } "
+                            :disabled=" form.processing ">
                             {{ form.processing ? "Saving..." : "Save" }}
                         </Button>
                     </div>
                 </form>
             </Card>
         </Container>
-        <Permissions
-            v-if="edit"
-            class="mt-6"
-            :role="item"
-            :permissions="permissions"
-        />
+        <Permissions v-if=" edit " class="mt-6" :role=" item "
+            :permissions=" permissions " />
     </BreezeAuthenticatedLayout>
 </template>
